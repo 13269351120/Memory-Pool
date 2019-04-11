@@ -47,6 +47,38 @@
 * 每个分配出去的单元的大小
 * 每个内存块的大小（这里还区分初始化时第一个内存块『相对较大』 和 内存不够时再次申请的内存块『相对较小』）
 * 第一块内存块的指针
+这里构造一个类似**总控制台**功能的类`Memorypool`，这个类提供给用户使用。
+```cpp
+typedef unsigned short USHORT;
+
+class MemoryBlock;
+
+//内存池对齐大小
+const int MEMPOOL_ALIGNMENT = 8;
+
+class MemoryPool
+{
+    public:
+        MemoryPool(USHORT nUnitSize, USHORT nInitSize = 1024, USHORT nGrowSize = 256 );
+
+        ~MemoryPool();
+
+        void* Alloc();
+
+        void Free(void* p);
+
+    private:
+        //头块内存块的指针
+        MemoryBlock* headBlock;
+        //分配出去固定的内存块的大小
+        USHORT m_nUnitSize;
+        //初始分配内存块的数量
+        USHORT m_nInitSize;
+        //每次增长时分配的内存块的数量
+        USHORT m_nGrowSize;
+};
+```
+
 
 
 ---
